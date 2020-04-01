@@ -1,0 +1,38 @@
+close all
+%Main script function for calling histogram equilisation function on all images
+
+addpath_recurse('..\..\..\helper_functions');
+addpath_recurse('..\..\..\..\images'); 
+%[images, labels] = load_image_database('..\..\..\', 'images.dataset',10);
+img_folder = dir('..\..\..\images\pos\*.jpg');
+files={img_folder.name}
+
+for k=1:numel(files)
+  images{k}=imread(files{k});
+end
+pos_size = size(images,2);
+
+%importing positive images from current directory
+%Files=dir('*.jpg');
+%numFiles = length(Files);
+
+image_size = 160*96;
+histeq_mat = zeros(pos_size,(image_size));
+%hist_mat = zeros(numFiles);
+
+% for each image file, read image, call histogram equilisation function,
+% reshape image so that each row has image pixels from one image
+% add reshaped array into row in HE matrix
+
+%for k=1:numFiles
+for k=1:pos_size
+    
+    %file_name = Files(k).name;
+    %image = imread(file_name);
+    enhanced_image = enhanceContrastHE(images);
+    reshaped_image = reshape(enhanced_image, [1,image_size]);
+    histeq_mat(k,:) = reshaped_image;
+
+end
+
+%fix reshaping of matrix to display the images
